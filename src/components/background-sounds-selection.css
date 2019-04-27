@@ -1,0 +1,26 @@
+#background-sounds-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#icons-and-volume-controls-wrapper {
+  display: flex;
+}
+
+#icons-and-volume-controls {
+  display: flex;
+  flex-direction: column;
+}
+
+#background-sounds-icons {
+  display: flex;
+  justify-content: center;
+}
+
+.icon {
+  width: 90px;
+  height: 90px;
+  margin-left: 50px;
+  fill: white;
+}
