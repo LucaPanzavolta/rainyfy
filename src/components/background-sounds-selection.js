@@ -39,7 +39,6 @@ class BackgroundSoundsSelection extends React.Component {
       `audio[name=${soundToChange}]`
     )[0];
     audioElementToChange.volume = newVolume;
-    console.log(newVolume, soundToChange, audioElementToChange);
   }
 
   render() {
@@ -49,7 +48,6 @@ class BackgroundSoundsSelection extends React.Component {
         {/* BACKGROUND SOUNDS ICONS AND VOLUME CONTROLS */}
         <div id="icons-and-volume-controls-wrapper">
           {Object.keys(this.props.state).map(key => {
-            console.log(key);
             return (
               <div id="icons-and-volume-controls" key={key}>
                 <img
@@ -69,6 +67,7 @@ class BackgroundSoundsSelection extends React.Component {
                 />
                 <audio
                   autoPlay
+                  muted={!this.props.state[key]}
                   loop
                   src={this.assets[key].sound}
                   name={key}
@@ -78,21 +77,6 @@ class BackgroundSoundsSelection extends React.Component {
             );
           })}
         </div>
-        {/* AUDIO PLAYERS */}
-        {/* <div id="audio-players">
-          {Object.keys(this.props.state).map(key =>
-            this.props.state[key] ? (
-              <audio
-                autoPlay
-                loop
-                src={this.assets[key].sound}
-                name={key}
-                key={key}
-              />
-            ) : null
-          )}
-        </div>
-      </div> */}
       </div>
     );
   }

@@ -12,7 +12,7 @@ function App() {
       </div>
       <div id="container">
         <BackgroundSoundsSelection />
-        <ForegroundMusicSelection />
+        {/* <ForegroundMusicSelection /> */}
       </div>
     </div>
   );

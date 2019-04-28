@@ -6,6 +6,8 @@
 
 #icons-and-volume-controls-wrapper {
   display: flex;
+  width: 50%;
+  justify-content: space-around;
 }
 
 #icons-and-volume-controls {
@@ -21,6 +23,5 @@
 .icon {
   width: 90px;
   height: 90px;
-  margin-left: 50px;
-  fill: white;
+  margin-bottom: 30px;
 }
