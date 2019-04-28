@@ -1,13 +1,15 @@
 import React from "react";
+import { connect } from "react-redux";
 
 // ICONS
 import rainIcon from "../icons/rain.svg";
-import thunderIcon from "../icons/thunder.svg";
+import windIcon from "../icons/wind.svg";
 import fireIcon from "../icons/fire.svg";
 
 // BACKGROUND-SOUNDS
 import rainSound from "../background-sounds/rain.mp3";
 import windSound from "../background-sounds/wind.mp3";
+import fireSound from "../background-sounds/fire.mp3";
 
 // CSS
 import "./background-sounds-selection.css";
@@ -18,29 +20,26 @@ class BackgroundSoundsSelection extends React.Component {
     this.handleClick = this.handleClick.bind(this);
   }
 
-  state = {
-    rainPlaying: false,
-    thunderPlaying: false,
-    windPlaying: false
+  assets = {
+    rain: { icon: rainIcon, sound: rainSound },
+    wind: { icon: windIcon, sound: windSound },
+    fire: { icon: fireIcon, sound: fireSound }
   };
 
   handleClick(e) {
     e.preventDefault();
     const clickedIcon = e.target.name;
-    this.setState({
-      [`${clickedIcon}Playing`]: !this.state[`${clickedIcon}Playing`]
-    });
+    this.props.changePlayingStatus(clickedIcon);
   }
 
-  returnCorrectSoundSource(key) {
-    switch (key) {
-      case "rainPlaying":
-        return rainSound;
-      case "windPlaying":
-        return windSound;
-      default:
-        return "";
-    }
+  handleVolumeChange(e) {
+    const newVolume = e.target.value / 100;
+    const soundToChange = e.target.name;
+    const audioElementToChange = document.querySelectorAll(
+      `audio[name=${soundToChange}]`
+    )[0];
+    audioElementToChange.volume = newVolume;
+    console.log(newVolume, soundToChange, audioElementToChange);
   }
 
   render() {
@@ -49,37 +48,71 @@ class BackgroundSoundsSelection extends React.Component {
         <h3>Pick a background sound </h3>
         {/* BACKGROUND SOUNDS ICONS AND VOLUME CONTROLS */}
         <div id="icons-and-volume-controls-wrapper">
-          {Object.keys(this.state).map(key => {
+          {Object.keys(this.props.state).map(key => {
+            console.log(key);
             return (
-              <div id="icons-and-volume-controls">
+              <div id="icons-and-volume-controls" key={key}>
                 <img
                   className="icon"
-                  name="rain"
+                  name={key}
+                  src={this.assets[key].icon}
+                  alt={`${key} icon`}
                   onClick={this.handleClick}
-                  src={rainIcon}
-                  alt="rain icon"
                 />
                 <input
-                  type="range"
                   className="volume-control"
+                  name={key}
+                  type="range"
                   min="0"
                   max="100"
+                  onChange={this.handleVolumeChange}
+                />
+                <audio
+                  autoPlay
+                  loop
+                  src={this.assets[key].sound}
+                  name={key}
+                  key={key}
                 />
               </div>
             );
           })}
         </div>
         {/* AUDIO PLAYERS */}
-        <div id="audio-players">
-          {Object.keys(this.state).map(key =>
-            this.state[key] ? (
-              <audio autoPlay src={this.returnCorrectSoundSource(key)} />
+        {/* <div id="audio-players">
+          {Object.keys(this.props.state).map(key =>
+            this.props.state[key] ? (
+              <audio
+                autoPlay
+                loop
+                src={this.assets[key].sound}
+                name={key}
+                key={key}
+              />
             ) : null
           )}
         </div>
+      </div> */}
       </div>
     );
   }
 }
 
-export default BackgroundSoundsSelection;
+const mapStateToProps = state => {
+  return {
+    state: state
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    changePlayingStatus: payload => {
+      dispatch({ type: "CHANGE_PLAYING_STATUS", payload });
+    }
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(BackgroundSoundsSelection);
